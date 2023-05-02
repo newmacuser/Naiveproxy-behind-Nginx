@@ -1,0 +1,100 @@
+{
+  "admin": {
+    "disabled": true
+  },
+  "logging": {
+    "logs": {
+      "default": {
+        "writer": {
+          "output": "file",
+          "filename": "/var/lib/caddy/error.log"
+        },
+        "level": "ERROR"
+      }
+    }
+  },
+  "storage": {
+    "module": "file_system",
+    "root": "/var/lib/caddy/ssl" //存放TLS证书的基本路径
+  },
+  "apps": {
+    "http": {
+      "servers": {
+        "https": {
+          "listen": ["127.0.0.1:7443"], //HTTPS server本地监听端口
+          "listener_wrappers": [{
+            "wrapper": "proxy_protocol" //开启PROXY protocol接收
+          },
+          {
+            "wrapper": "tls" //HTTPS server开启PROXY protocol接收必须配置
+          }],
+          "routes": [
+          {
+            "handle": [{
+              "handler": "forward_proxy",
+              "auth_user_deprecated": "c30bf12", //NaiveProxy用户，修改为自己的。
+              "auth_pass_deprecated": "ede1a2de271", //NaiveProxy密码，修改为自己的。
+              "hide_ip": true,
+              "hide_via": true,
+              "probe_resistance": {}
+            }]
+          },
+        {
+             "handle": [
+               {
+                 "handler": "reverse_proxy",
+                 "headers": {
+                   "request": {
+                     "set": {
+                       "Host": [
+                         "{http.reverse_proxy.upstream.hostport}"
+                        ],
+                       "X-Forwarded-Host": [
+                         "{http.request.host}"]
+                     }
+                   }
+                 },
+                 "transport": {
+                   "protocol": "http",
+                   "tls": {}
+                 },
+                 "upstreams": [
+                   {
+                     "dial": "ifile.fiber-microbiome.com:443"//伪装网址
+                   }
+                 ]
+               }
+             ]
+           }
+         ],
+        "tls_connection_policies": [
+          {
+            "match": {
+              "sni": ["info.fiber-microbiome.com"] //限定域名连接，修改为自己的域名。
+              },
+              "protocol_min": "tls1.2",
+              "protocol_max": "tls1.2",
+              "cipher_suites": ["TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256"], //非AES算法的密码套件
+              "curves": ["secp521r1","secp384r1","secp256r1"]
+              }
+              ],
+              "automatic_https": {
+                 "disable": true}
+          }
+          }
+          },
+    "tls": {
+      "certificates": {
+        "automate": ["info.fiber-microbiome.com"] //自动化管理TLS证书（包括获取、更新及加载证书）。修改为自己的域名。
+      },
+      "automation": {
+        "policies": [{
+          "issuers": [{
+            "module": "acme", //acme表示从Let's Encrypt申请TLS证书，zerossl表示从ZeroSSL申请TLS证书。必须acme与zerossl二选一（固定TLS证书的目录便于引用）。
+            "email": "ytm1234@gmail.com" //修改为自己的电子邮箱（选配）
+          }]
+        }]
+      }
+    }
+  }
+}
