@@ -32,8 +32,8 @@
           {
             "handle": [{
               "handler": "forward_proxy",
-              "auth_user_deprecated": "c30bf12", //NaiveProxy用户，修改为自己的。
-              "auth_pass_deprecated": "ede1a2de271", //NaiveProxy密码，修改为自己的。
+              "auth_user_deprecated": "username", //NaiveProxy用户，修改为自己的。
+              "auth_pass_deprecated": "password", //NaiveProxy密码，修改为自己的。
               "hide_ip": true,
               "hide_via": true,
               "probe_resistance": {}
@@ -60,7 +60,7 @@
                  },
                  "upstreams": [
                    {
-                     "dial": "ifile.fiber-microbiome.com:443"//伪装网址
+                     "dial": "www.bing.com:443"//伪装网址
                    }
                  ]
                }
@@ -70,7 +70,7 @@
         "tls_connection_policies": [
           {
             "match": {
-              "sni": ["info.fiber-microbiome.com"] //限定域名连接，修改为自己的域名。
+              "sni": ["MyDomain.com"] //限定域名连接，修改为自己的域名。
               },
               "protocol_min": "tls1.2",
               "protocol_max": "tls1.2",
@@ -85,13 +85,13 @@
           },
     "tls": {
       "certificates": {
-        "automate": ["info.fiber-microbiome.com"] //自动化管理TLS证书（包括获取、更新及加载证书）。修改为自己的域名。
+        "automate": ["MyDomain.com"] //自动化管理TLS证书（包括获取、更新及加载证书）。修改为自己的域名。
       },
       "automation": {
         "policies": [{
           "issuers": [{
             "module": "acme", //acme表示从Let's Encrypt申请TLS证书，zerossl表示从ZeroSSL申请TLS证书。必须acme与zerossl二选一（固定TLS证书的目录便于引用）。
-            "email": "ytm1234@gmail.com" //修改为自己的电子邮箱（选配）
+            "email": "example@gmail.com" //修改为自己的电子邮箱（选配）
           }]
         }]
       }
