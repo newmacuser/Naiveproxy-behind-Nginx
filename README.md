@@ -20,7 +20,7 @@ mkdir /etc/caddy
 
 # caddy配置守护进程(开机自启)
 
-groupadd --system caddy
+groupadd --system caddy \
 useradd --system \
     --gid caddy \
     --create-home \
@@ -30,29 +30,29 @@ useradd --system \
     caddy
 
 # 创建 caddy.service 文件，路径：/etc/systemd/system/。填入以下内容:
-[Unit]
-Description=Caddy
-Documentation=https://caddyserver.com/docs/
-After=network.target network-online.target
-Requires=network-online.target
+[Unit] \
+Description=Caddy \
+Documentation=https://caddyserver.com/docs/ \
+After=network.target network-online.target \
+Requires=network-online.target 
 
-[Service]
-User=caddy
-Group=caddy
-ExecStart=/usr/bin/caddy run --environ --config /etc/caddy/caddy.json
-ExecReload=/usr/bin/caddy reload --config /etc/caddy/caddy.json
-TimeoutStopSec=5s
-LimitNOFILE=1048576
-LimitNPROC=512
-PrivateTmp=true
-ProtectSystem=full
-AmbientCapabilities=CAP_NET_BIND_SERVICE
+[Service] \
+User=caddy \
+Group=caddy \
+ExecStart=/usr/bin/caddy run --environ --config /etc/caddy/caddy.json \
+ExecReload=/usr/bin/caddy reload --config /etc/caddy/caddy.json \
+TimeoutStopSec=5s \
+LimitNOFILE=1048576 \
+LimitNPROC=512 \
+PrivateTmp=true \
+ProtectSystem=full \
+AmbientCapabilities=CAP_NET_BIND_SERVICE 
 
-[Install]
-WantedBy=multi-user.target
+[Install] \
+WantedBy=multi-user.target 
 
 # 设置开机自启动
-systemctl daemon-reload
+systemctl daemon-reload \
 systemctl enable caddy
 
 
