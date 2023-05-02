@@ -1,5 +1,5 @@
 # Naiveproxy-behind-Nginx
-示例用nginx反代naiveproxy(Caddy2) \
+示例使用nginx前置分流naiveproxy(Caddy2)，共用443端口。 \
 由于Nginx是比Caddy更常用的反代服务，所以想让网站和其他服务与naiveproxy(Caddy2)共存，并且仍然用Nginx前置分流。\
 在此例中Caddy2仅提供naiveproxy的功能。
 
